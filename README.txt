@@ -1,2 +1,2 @@
-Portfolio to show off my coding abilities.
-Code should not work all together however individual folders should.
+Portfolio of random code snippets that I feel somewhat proud of.
+Code is likely pulled from larger projects and will not work alone.
