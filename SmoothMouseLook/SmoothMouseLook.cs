@@ -44,8 +44,8 @@ public class SmoothMouseLook : MonoBehaviour
             //otherwise apply both rotations to the camera
             if (character)
             {
+                transform.localRotation = Quaternion.AngleAxis(finalMouse.y, Vector3.right); //pitch
                 character.transform.localRotation = Quaternion.AngleAxis(finalMouse.x, character.transform.up); //yaw
-                transform.localRotation = Quaternion.AngleAxis(finalMouse.y, transform.right); //pitch
             }
             else
                 transform.localRotation = Quaternion.Euler(finalMouse.y, finalMouse.x, 0);
