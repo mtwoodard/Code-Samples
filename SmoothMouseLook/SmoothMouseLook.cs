@@ -11,10 +11,11 @@ using UnityEngine;
 public class SmoothMouseLook : MonoBehaviour
 {
     public bool cursorLock = true;
-    public int inverted = -1;
+    public int inverted = -1; // must be either 1 or -1
     public float sensitivityX = 2.0f;
     public float sensitivityY = 2.0f;
     public float pitchClamp = 80f;
+    public float yawClamp = 360f;
     public float smooth = 3.0f;
     public GameObject character;
 
@@ -28,22 +29,27 @@ public class SmoothMouseLook : MonoBehaviour
 
     void Update()
     {
-        if (Cursor.lockState == CursorLockMode.Locked)
-        {
+        if (Cursor.lockState == CursorLockMode.Locked){
             float mouseX = Input.GetAxisRaw("Mouse X") * sensitivityX * smooth;
             float mouseY = Input.GetAxisRaw("Mouse Y") * sensitivityY * smooth * inverted;
+
             //smooth out our raw values and previous values using 1/smooth as the t
             smoothMouse.x = Mathf.Lerp(smoothMouse.x, mouseX, 1f / smooth);
             smoothMouse.y = Mathf.Lerp(smoothMouse.y, mouseY, 1f / smooth);
+
             //add the smoothed value to our current rotation value
             finalMouse += smoothMouse;
-            //simplify x and clamp our pitch
-            finalMouse.x = SimplifyAngle(finalMouse.x);
+            
+            //either simplify x if we allow complete turning or clamp it and clamp our pitch
+            if(yawClamp == 360f)
+                finalMouse.x = Mathf.Clamp(finalMouse.x, -yawClamp, yawClamp);
+            else
+                finalMouse.x = SimplifyAngle(finalMouse.x);
             finalMouse.y = Mathf.Clamp(finalMouse.y, -pitchClamp, pitchClamp);
+
             //if we have a body rotate the body on y axis and camera on x axis
             //otherwise apply both rotations to the camera
-            if (character)
-            {
+            if (character){
                 transform.localRotation = Quaternion.AngleAxis(finalMouse.y, Vector3.right); //pitch
                 character.transform.localRotation = Quaternion.AngleAxis(finalMouse.x, character.transform.up); //yaw
             }
