@@ -41,7 +41,7 @@ public class SmoothMouseLook : MonoBehaviour
             finalMouse += smoothMouse;
             
             //either simplify x if we allow complete turning or clamp it and clamp our pitch
-            if(yawClamp == 360f)
+            if(yawClamp != 360f)
                 finalMouse.x = Mathf.Clamp(finalMouse.x, -yawClamp, yawClamp);
             else
                 finalMouse.x = SimplifyAngle(finalMouse.x);
