@@ -11,27 +11,46 @@ using UnityEngine;
 public class SmoothMouseLook : MonoBehaviour
 {
     public bool cursorLock = true;
+    public bool cameraLock = false;
     public int inverted = -1; // must be either 1 or -1
     public float sensitivityX = 2.0f;
     public float sensitivityY = 2.0f;
     public float pitchClamp = 80f;
-    public float yawClamp = 360f;
     public float smooth = 3.0f;
     public GameObject character;
 
     Vector2 smoothMouse;
     Vector2 finalMouse;
+    PlayerController player;
 
     void Start()
     {
+        // Register with Globals -------------------
+        Globals.Instance.RegisterGlobal("MainCamera", gameObject);
+        // ----------------------------------------
         Cursor.lockState = CursorLockMode.Locked;
+        player = GetComponentInParent<PlayerController>();
+        finalMouse.y = transform.localRotation.eulerAngles.x;
+        if(character)
+            finalMouse.x = character.transform.localRotation.eulerAngles.y;
+        else
+            finalMouse.x = transform.localRotation.eulerAngles.y;
     }
 
     void Update()
     {
         if (Cursor.lockState == CursorLockMode.Locked){
-            float mouseX = Input.GetAxisRaw("Mouse X") * sensitivityX * smooth;
-            float mouseY = Input.GetAxisRaw("Mouse Y") * sensitivityY * smooth * inverted;
+            float mouseX, mouseY;
+            if (cameraLock)
+            {
+                mouseX = 0f;
+                mouseY = 0f;
+            }
+            else
+            {
+                mouseX = Input.GetAxisRaw("Mouse X") * sensitivityX * smooth;
+                mouseY = Input.GetAxisRaw("Mouse Y") * sensitivityY * smooth * inverted;
+            }
 
             //smooth out our raw values and previous values using 1/smooth as the t
             smoothMouse.x = Mathf.Lerp(smoothMouse.x, mouseX, 1f / smooth);
@@ -40,11 +59,6 @@ public class SmoothMouseLook : MonoBehaviour
             //add the smoothed value to our current rotation value
             finalMouse += smoothMouse;
             
-            //either simplify x if we allow complete turning or clamp it and clamp our pitch
-            if(yawClamp != 360f)
-                finalMouse.x = Mathf.Clamp(finalMouse.x, -yawClamp, yawClamp);
-            else
-                finalMouse.x = SimplifyAngle(finalMouse.x);
             finalMouse.y = Mathf.Clamp(finalMouse.y, -pitchClamp, pitchClamp);
 
             //if we have a body rotate the body on y axis and camera on x axis
@@ -70,26 +84,5 @@ public class SmoothMouseLook : MonoBehaviour
     public void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
-    }
-    /// <summary>
-    /// Takes the angle and tries to recursively lower it back inside the range [-360 , 360]
-    /// </summary>
-    /// <param name="xVal">Angle we want to lower</param>
-    /// <returns>Angle inside range [-360, 360]</returns>
-    static float SimplifyAngle(float xVal)
-    {
-        bool keepGoing = false;
-        if (xVal >= 360f){
-            keepGoing = true;
-            xVal -= 360f;
-        }
-        else if (xVal <= -360f){
-            keepGoing = true;
-            xVal += 360f;
-        }
-        if (keepGoing)
-            return SimplifyAngle(xVal);
-        else
-            return xVal;
     }
 }
