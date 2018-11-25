@@ -1,0 +1,11 @@
+TriggerPortal-Unreal.h/cpp
+--------------------------
+Trigger Box actor that has the ability to "teleport" players
+back some distance. This effect is covered using UE4's 
+fog which increases when the trigger is entered.
+
+Interactive Fog Blueprint - Unreal.PNG
+--------------------------------------
+Blueprint code that uses TriggerPortal's information to 
+increase the density of in game fog only when the player
+is in one of the TriggerPortals and vice versa.
