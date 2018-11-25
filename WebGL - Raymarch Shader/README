@@ -1,0 +1,25 @@
+fragment - WebGL.glsl
+---------------------
+Implementation of a various space raymarcher capable of local
+honeycomb-like structures as well as true individual objects.
+Also contains code for estimating normals and the signed distance
+field for global objects. Meant to be pieced together with other parts 
+in order to form a complete shader. Allowing for different shader 
+possibilities which can be changed at runtime.
+
+globalsInclude - WebGL.glsl
+---------------------------
+Variable declarations, function forward declarations, and some 
+generic functions. Also an interactive implementation of the phong
+model as well as tri-planar texture sampling. Meant to be pieced
+together with other parts in order to form a complete shader. Allowing
+for different shader possibilities which can be changed at runtime.
+
+raymarch - WebGL.png
+--------------------
+Screen capture of the curved spaces renderer.
+This program can be used in most modern web browsers
+by visiting www.michaelwoodard.net/hypVR-Ray. Note
+that this program is intensive however a version
+designed for lower specs can be found at
+www.michaelwoodard.net/hypVR-Ray_m
