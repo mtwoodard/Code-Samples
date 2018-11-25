@@ -1,0 +1,15 @@
+Event - Unity.cs
+----------------
+Base class to be inherited and extended into various different
+scripted events. Also includes some functionality for priority
+queue usage.
+
+EventMaster - Unity.cs
+----------------------
+Manages events (Event - Unity.cs) using a priority queue to 
+determine which is the next one to activate
+
+PriorityQueue - Unity.cs
+------------------------
+Simple implementation of a generic priority queue data structure
+utilizing C#'s list.
