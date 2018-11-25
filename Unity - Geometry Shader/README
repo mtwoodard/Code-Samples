@@ -1,0 +1,5 @@
+GrassGeometry - Unity.shader
+----------------------------
+Point cloud shader that takes a single point and renders out a 
+simple mesh using a geometry shader. Also receives and casts
+shadows.
